@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione Gare di Corsa</title>
+    <style>
+        /* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body and Background */
+body {
+    font-family: 'Orbitron', 'Arial', sans-serif; /* Futuristic font */
+    background: linear-gradient(135deg, #1a1a1a 0%, #2c3e50 100%); /* Dark, tech-inspired gradient */
+    min-height: 100vh;
+    padding: 20px;
+    color: #e0e0e0;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: auto;
+    background: rgba(30, 30, 30, 0.95); /* Semi-transparent dark background */
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); /* Neon cyan glow */
+    overflow: hidden;
+    border: 1px solid #00ffcc;
+}
+
+/* Header */
+.header {
+    background: linear-gradient(45deg, #00ffcc, #ff0066); /* Neon cyan to magenta gradient */
+    color: #ffffff;
+    padding: 30px;
+    text-align: center;
+    border-bottom: 2px solid #00ffcc;
+}
+
+.header h1 {
+    font-size: 2.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+}
+
+.header p {
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
+
+/* Content */
+.content {
+    padding: 30px;
+}
+
+/* Section Headings */
+.setup-section h2,
+.race-section h2,
+.summary-section h2 {
+    color: #00ffcc;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    border-bottom: 2px solid #ff0066; /* Magenta border */
+    padding-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #00ffcc;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #444;
+    border-radius: 8px;
+    font-size: 16px;
+    background: #222;
+    color: #e0e0e0;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #00ffcc;
+    box-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+}
+
+/* Buttons */
+.btn {
+    background: linear-gradient(45deg, #ff0066, #00ffcc);
+    color: #ffffff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: transform 0.2s, box-shadow 0.3s;
+    margin: 5px;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 12px rgba(0, 255, 255, 0.7);
+}
+
+.btn:disabled {
+    background: #555;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Team Setup */
+.team-setup {
+    background: rgba(40, 40, 40, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #00ffcc;
+}
+
+/* Participants Grid */
+.participants-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.participant-input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Standings */
+.standings {
+    background: rgba(40, 40, 40, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    border: 1px solid #ff0066;
+}
+
+.standings h3 {
+    color: #00ffcc;
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+}
+
+/* Standings Table */
+.standings-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    table-layout: auto;
+}
+
+.standings-table th,
+.standings-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #444;
+    white-space: nowrap;
+}
+
+.standings-table th {
+    background: linear-gradient(45deg, #ff0066, #00ffcc);
+    color: #ffffff;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.standings-table tr:nth-child(even) {
+    background: rgba(60, 60, 60, 0.5);
+}
+
+.standings-table tr:hover {
+    background: rgba(0, 255, 255, 0.1);
+}
+
+/* Race Tabs */
+.race-tabs {
+    display: flex;
+    margin-bottom: 20px;
+    background: #222;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #00ffcc;
+}
+
+.race-tab {
+    flex: 1;
+    padding: 15px;
+    background: #333;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    color: #e0e0e0;
+    text-transform: uppercase;
+    transition: background 0.3s, color 0.3s;
+}
+
+.race-tab:hover {
+    background: #444;
+}
+
+.race-tab.active {
+    background: linear-gradient(45deg, #00ffcc, #ff0066);
+    color: #ffffff;
+}
+
+/* Race Content */
+.race-content {
+    display: none;
+}
+
+.race-content.active {
+    display: block;
+}
+
+/* Time Input Grid */
+.time-input-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.time-input-item {
+    background: rgba(50, 50, 50, 0.9);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #00ffcc;
+}
+
+/* Group Formation */
+.group-formation {
+    background: rgba(40, 40, 40, 0.8);
+    border: 1px solid #ff0066;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.group {
+    background: rgba(50, 50, 50, 0.9);
+    border: 2px solid #00ffcc;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px 0;
+}
+
+.group h4 {
+    color: #00ffcc;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+/* Position Inputs */
+.position-inputs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin-top: 15px;
+}
+
+/* Hidden Class */
+.hidden {
+    display: none;
+}
+
+/* Summary Section */
+.summary-section {
+    background: linear-gradient(135deg, #1a1a1a, #2c3e50);
+    color: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    margin-top: 30px;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+}
+
+.summary-section h2 {
+    color: #ffffff;
+    border-bottom: 2px solid #00ffcc;
+}
+
+/* Final Standings */
+.final-standings {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.final-table {
+    background: rgba(40, 40, 40, 0.9);
+    color: #e0e0e0;
+    padding: 20px;
+    border-radius: 10px;
+    overflow-x: auto;
+    border: 1px solid #ff0066;
+}
+
+.final-table table {
+    min-width: 100%;
+}
+
+/* Error Message */
+.error-message {
+    color: #ff0066;
+    background: rgba(255, 0, 102, 0.1);
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+    display: none;
+    border: 1px solid #ff0066;
+}
+
+/* Race 4 Config */
+.race4-config {
+    background: rgba(40, 40, 40, 0.8);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #00ffcc;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 2rem;
+    }
+
+    .content {
+        padding: 20px;
+    }
+
+    .race-tabs {
+        flex-direction: column;
+    }
+
+    .standings-table th,
+    .standings-table td {
+        padding: 8px;
+        font-size: 14px;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏃‍♂️ Gestione Gare di Corsa</h1>
+            <p>Sistema completo per la gestione di eventi di corsa con classifiche individuali e di squadra</p>
+        </div>
+        <div class="content">
+            <div id="setup-section" class="setup-section">
+                <h2>📋 Configurazione Evento</h2>
+                <div class="form-group">
+                    <label for="num-teams">Numero di squadre:</label>
+                    <input type="number" id="num-teams" min="2" max="20" value="5">
+                </div>
+                <button id="setup-teams-btn" class="btn">Configura Squadre</button>
+                <div id="error-message" class="error-message"></div>
+                <div id="teams-setup" class="hidden">
+                    <h3>Inserimento Squadre e Corridori</h3>
+                    <div id="teams-container"></div>
+                    <button class="btn" onclick="startRaces()">Inizia le Gare</button>
+                </div>
+            </div>
+            <div id="races-section" class="race-section hidden">
+                <h2>🏁 Gestione Gare</h2>
+                <div class="race-tabs">
+                    <button class="race-tab active" onclick="showRace('qualifying')">Qualifica</button>
+                    <button class="race-tab" onclick="showRace('race2')">Gara 2</button>
+                    <button class="race-tab" onclick="showRace('race3')">Gara 3</button>
+                    <button class="race-tab" onclick="showRace('race4')">Gara 4</button>
+                    <button class="race-tab" onclick="showRace('summary')">Classifica Finale</button>
+                </div>
+                <div id="qualifying-content" class="race-content active">
+                    <h3>🏃‍♂️ Qualifica - Inserimento Tempi</h3>
+                    <p>Inserisci i tempi di ogni corridore (formato: mm:ss.ms o solo secondi)</p>
+                    <div id="qualifying-times" class="time-input-grid"></div>
+                    <button class="btn" onclick="calculateQualifyingResults()">Calcola Classifica Qualifica</button>
+                    <div id="qualifying-results" class="standings"></div>
+                </div>
+                <div id="race2-content" class="race-content">
+                    <h3>🏃‍♂️ Gara 2 - Tempi Squadra</h3>
+                    <p>Ogni corridore presente corre (se da solo, corre due volte). Inserisci i tempi.</p>
+                    <div id="race2-times" class="time-input-grid"></div>
+                    <button class="btn" onclick="calculateRace2Results()">Calcola Classifica Gara 2</button>
+                    <div id="race2-results" class="standings"></div>
+                </div>
+                <div id="race3-content" class="race-content">
+                    <h3>🏃‍♂️ Gara 3 - Gare a Gruppi</h3>
+                    <p>Gare a gruppi basate sulla classifica della qualifica</p>
+                    <div id="race3-groups" class="group-formation"></div>
+                    <div id="race3-rounds"></div>
+                    <button class="btn" onclick="calculateRace3Results()">Calcola Classifica Gara 3</button>
+                    <div id="race3-results" class="standings"></div>
+                </div>
+                <div id="race4-content" class="race-content">
+                    <h3>🏃‍♂️ Gara 4 - Tutti contro Tutti</h3>
+                    <p>Configura i round e i gruppi, ogni corridore partecipa una volta per round</p>
+                    <div id="race4-groups" class="group-formation"></div>
+                    <button class="btn" onclick="calculateRace4Results()">Calcola Classifica Gara 4</button>
+                    <div id="race4-results" class="standings"></div>
+                </div>
+                <div id="summary-content" class="race-content">
+                    <div class="summary-section">
+                        <h2>🏆 Classifica Finale Evento</h2>
+                        <div id="final-standings" class="final-standings"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    console.log('Script JavaScript avviato');
+
+    try {
+        // Variabili globali
+        let teams = [];
+        let runners = [];
+        let qualifyingResults = {};
+        let race2Results = {};
+        let race3Results = {};
+        let race4Results = {};
+        let finalStandings = { runners: [], teams: [] };
+
+        // Sistemi di punteggio
+        const finalPointsSystem = [25, 18, 15, 12, 10, 8, 6, 4, 2, 1];
+        const roundPointsSystem = [10, 8, 6, 4, 2]; // Gara 3
+        const roundPointsSystemRace4 = [10, 8, 6, 4, 2]; // Gara 4
+
+        // Configurazione squadre
+        function setupTeams() {
+            console.log('Funzione setupTeams avviata');
+            try {
+                const numTeamsInput = document.getElementById('num-teams');
+                const errorMessage = document.getElementById('error-message');
+                const container = document.getElementById('teams-container');
+                const teamsSetup = document.getElementById('teams-setup');
+
+                if (!numTeamsInput || !errorMessage || !container || !teamsSetup) {
+                    throw new Error('Elementi DOM non trovati: num-teams, error-message, teams-container o teams-setup mancanti');
+                }
+
+                const numTeams = parseInt(numTeamsInput.value);
+                if (isNaN(numTeams) || numTeams < 2 || numTeams > 20) {
+                    errorMessage.textContent = 'Inserisci un numero di squadre valido (2–20)';
+                    errorMessage.style.display = 'block';
+                    console.log('Errore: Numero di squadre non valido:', numTeams);
+                    return;
+                }
+
+                errorMessage.style.display = 'none';
+                teams = [];
+                runners = [];
+                container.innerHTML = '';
+
+                for (let i = 0; i < numTeams; i++) {
+                    const teamDiv = document.createElement('div');
+                    teamDiv.className = 'team-setup';
+                    teamDiv.innerHTML = `
+                        <h4>Squadra ${i + 1}</h4>
+                        <div class="form-group">
+                            <label>Nome squadra:</label>
+                            <input type="text" id="team-name-${i}" placeholder="Nome squadra ${i + 1}" value="Squadra ${i + 1}">
+                        </div>
+                        <div class="participants-grid">
+                            <div class="participant-input">
+                                <label>Corridore 1:</label>
+                                <input type="text" id="runner-${i}-0" placeholder="Nome corridore 1">
+                                <label><input type="checkbox" id="present-${i}-0" checked> Presente</label>
+                            </div>
+                            <div class="participant-input">
+                                <label>Corridore 2:</label>
+                                <input type="text" id="runner-${i}-1" placeholder="Nome corridore 2">
+                                <label><input type="checkbox" id="present-${i}-1" checked> Presente</label>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(teamDiv);
+                }
+
+                teamsSetup.classList.remove('hidden');
+                console.log('Sezione teams-setup visualizzata con', numTeams, 'squadre');
+            } catch (error) {
+                console.error('Errore in setupTeams:', error);
+                const errorMessage = document.getElementById('error-message');
+                if (errorMessage) {
+                    errorMessage.textContent = 'Errore nella configurazione: ' + error.message;
+                    errorMessage.style.display = 'block';
+                }
+            }
+        }
+
+        // Inizializzazione listener pulsante Configura Squadre
+        console.log('Inizializzazione listener Configura Squadre');
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM completamente caricato');
+            const setupButton = document.getElementById('setup-teams-btn');
+            if (setupButton) {
+                setupButton.addEventListener('click', () => {
+                    console.log('Pulsante Configura Squadre cliccato');
+                    setupTeams();
+                });
+                console.log('Listener aggiunto al pulsante setup-teams-btn');
+            } else {
+                console.error('Pulsante setup-teams-btn non trovato');
+                const errorMessage = document.getElementById('error-message');
+                if (errorMessage) {
+                    errorMessage.textContent = 'Errore: Pulsante Configura Squadre non trovato';
+                    errorMessage.style.display = 'block';
+                }
+            }
+        });
+
+        // Avvio gare
+        function startRaces() {
+            console.log('Funzione startRaces avviata');
+            try {
+                const numTeams = parseInt(document.getElementById('num-teams').value);
+                teams = [];
+                runners = [];
+
+                for (let i = 0; i < numTeams; i++) {
+                    const teamName = document.getElementById(`team-name-${i}`)?.value || `Squadra ${i + 1}`;
+                    const team = { id: i, name: teamName, runners: [] };
+
+                    for (let j = 0; j < 2; j++) {
+                        const runnerName = document.getElementById(`runner-${i}-${j}`)?.value;
+                        const isPresent = document.getElementById(`present-${i}-${j}`)?.checked;
+                        if (runnerName && isPresent) {
+                            const runner = {
+                                id: runners.length,
+                                name: runnerName,
+                                teamId: i,
+                                teamName: teamName,
+                                present: true,
+                                presentPoints: 5
+                            };
+                            runners.push(runner);
+                            team.runners.push(runner);
+                        }
+                    }
+
+                    if (team.runners.length > 0) teams.push(team);
+                }
+
+                if (teams.length < 2) {
+                    throw new Error('Servono almeno 2 squadre con corridori validi');
+                }
+
+                document.getElementById('setup-section').classList.add('hidden');
+                document.getElementById('races-section').classList.remove('hidden');
+                setupQualifyingRace();
+                setupRace4Groups();
+                console.log('Gare avviate con', teams.length, 'squadre e', runners.length, 'corridori');
+            } catch (error) {
+                console.error('Errore in startRaces:', error);
+                const errorMessage = document.getElementById('error-message');
+                if (errorMessage) {
+                    errorMessage.textContent = error.message;
+                    errorMessage.style.display = 'block';
+                }
+            }
+        }
+
+        // Navigazione tra gare
+        function showRace(raceId) {
+            console.log('Mostra gara:', raceId);
+            document.querySelectorAll('.race-content').forEach(content => content.classList.remove('active'));
+            document.querySelectorAll('.race-tab').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(`${raceId}-content`).classList.add('active');
+            document.querySelector(`[onclick="showRace('${raceId}')"]`).classList.add('active');
+            if (raceId === 'race4' && runners.length > 0) setupRace4Groups();
+        }
+
+        // Configurazione Qualifica
+        function setupQualifyingRace() {
+            console.log('Configurazione Qualifica');
+            const container = document.getElementById('qualifying-times');
+            container.innerHTML = '';
+
+            teams.forEach(team => {
+                if (team.runners.length === 1) {
+                    const runner = team.runners[0];
+                    const div = document.createElement('div');
+                    div.className = 'time-input-item';
+                    div.innerHTML = `
+                        <label>${runner.name} (${team.name}) - Tempo 1</label>
+                        <input type="text" id="qual-time-${runner.id}-1" placeholder="mm:ss.ms">
+                        <label>${runner.name} (${team.name}) - Tempo 2</label>
+                        <input type="text" id="qual-time-${runner.id}-2" placeholder="mm:ss.ms">
+                    `;
+                    container.appendChild(div);
+                } else {
+                    team.runners.forEach(runner => {
+                        const div = document.createElement('div');
+                        div.className = 'time-input-item';
+                        div.innerHTML = `
+                            <label>${runner.name} (${team.name})</label>
+                            <input type="text" id="qual-time-${runner.id}" placeholder="mm:ss.ms">
+                        `;
+                        container.appendChild(div);
+                    });
+                }
+            });
+
+            setupRace2();
+        }
+
+        // Configurazione Gara 2
+        function setupRace2() {
+            console.log('Configurazione Gara 2');
+            const container = document.getElementById('race2-times');
+            container.innerHTML = '';
+
+            teams.forEach(team => {
+                const div = document.createElement('div');
+                div.className = 'time-input-item';
+
+                if (team.runners.length === 1) {
+                    const runner = team.runners[0];
+                    div.innerHTML = `
+                        <label>${team.name} - ${runner.name} (Tempo 1)</label>
+                        <input type="text" id="race2-time-${team.id}-0" placeholder="mm:ss.ms">
+                        <label>${team.name} - ${runner.name} (Tempo 2)</label>
+                        <input type="text" id="race2-time-${team.id}-1" placeholder="mm:ss.ms">
+                    `;
+                } else {
+                    team.runners.forEach((runner, idx) => {
+                        const runnerDiv = document.createElement('div');
+                        runnerDiv.innerHTML = `
+                            <label>${team.name} - ${runner.name}</label>
+                            <input type="text" id="race2-time-${team.id}-${idx}" placeholder="mm:ss.ms">
+                        `;
+                        div.appendChild(runnerDiv);
+                    });
+                }
+                container.appendChild(div);
+            });
+        }
+
+        // Utilità per il tempo
+        function parseTime(timeStr) {
+            if (!timeStr) return Infinity;
+            try {
+                if (timeStr.includes(':')) {
+                    const [minutes, seconds] = timeStr.split(':').map(parseFloat);
+                    return (minutes || 0) * 60 + (seconds || 0);
+                }
+                return parseFloat(timeStr) || Infinity;
+            } catch (error) {
+                console.warn('Errore nel parsing del tempo:', timeStr);
+                return Infinity;
+            }
+        }
+
+        function formatTime(seconds) {
+            if (seconds === Infinity) return 'N/A';
+            const mins = Math.floor(seconds / 60);
+            const secs = (seconds % 60).toFixed(2);
+            return `${mins}:${secs.padStart(5, '0')}`;
+        }
+
+        // Calcolo Qualifica
+        function calculateQualifyingResults() {
+            console.log('Calcolo risultati Qualifica');
+            const results = [];
+            const teamTimes = [];
+
+            teams.forEach(team => {
+                let teamTime = 0;
+                if (team.runners.length === 1) {
+                    const runner = team.runners[0];
+                    const time1 = parseTime(document.getElementById(`qual-time-${runner.id}-1`)?.value);
+                    const time2 = parseTime(document.getElementById(`qual-time-${runner.id}-2`)?.value);
+                    teamTime = (time1 === Infinity ? 0 : time1) + (time2 === Infinity ? 0 : time2);
+                    results.push({ ...runner, time: time1, timeFormatted: formatTime(time1), qualPosition: 0 });
+                    results.push({ ...runner, time: time2, timeFormatted: formatTime(time2), qualPosition: 0 });
+                } else {
+                    team.runners.forEach(runner => {
+                        const time = parseTime(document.getElementById(`qual-time-${runner.id}`)?.value);
+                        teamTime += time === Infinity ? 0 : time;
+                        results.push({ ...runner, time: time, timeFormatted: formatTime(time), qualPosition: 0 });
+                    });
+                }
+                teamTimes.push({ ...team, time: teamTime, timeFormatted: formatTime(teamTime), qualPosition: 0 });
+            });
+
+            results.sort((a, b) => a.time - b.time);
+            results.forEach((runner, idx) => runner.qualPosition = idx + 1);
+
+            teamTimes.sort((a, b) => {
+                if (a.time !== b.time) return a.time - b.time;
+                const aBestQual = Math.min(...results.filter(r => r.teamId === a.id).map(r => r.qualPosition));
+                const bBestQual = Math.min(...results.filter(r => r.teamId === b.id).map(r => r.qualPosition));
+                return aBestQual - bBestQual;
+            });
+
+            teamTimes.forEach((team, idx) => team.qualPosition = idx + 1);
+
+            qualifyingResults = { runners: results, teams: teamTimes };
+            displayQualifyingResults();
+            setupRace3Groups();
+        }
+
+        function displayQualifyingResults() {
+            console.log('Visualizzazione risultati Qualifica');
+            const container = document.getElementById('qualifying-results');
+            container.innerHTML = `
+                <h3>🏆 Classifica Qualifica - Corridori</h3>
+                <table class="standings-table">
+                    <thead>
+                        <tr><th>Pos.</th><th>Corridore</th><th>Squadra</th><th>Tempo</th></tr>
+                    </thead>
+                    <tbody>
+                        ${qualifyingResults.runners.map((runner, idx) => 
+                            `<tr><td>${idx + 1}</td><td>${runner.name}</td><td>${runner.teamName}</td><td>${runner.timeFormatted}</td></tr>`
+                        ).join('')}
+                    </tbody>
+                </table>
+                <h3>🏆 Classifica Qualifica - Squadre</h3>
+                <table class="standings-table">
+                    <thead>
+                        <tr><th>Pos.</th><th>Squadra</th><th>Tempo Totale</th></tr>
+                    </thead>
+                    <tbody>
+                        ${qualifyingResults.teams.map((team, idx) => 
+                            `<tr><td>${idx + 1}</td><td>${team.name}</td><td>${team.timeFormatted}</td></tr>`
+                        ).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        // Calcolo Gara 2
+        function calculateRace2Results() {
+            console.log('Calcolo risultati Gara 2');
+            const teamResults = [];
+            const runnerResults = [];
+
+            teams.forEach(team => {
+                let totalTime = 0;
+                let validTimes = 0;
+
+                if (team.runners.length === 1) {
+                    const runner = team.runners[0];
+                    const time1 = parseTime(document.getElementById(`race2-time-${team.id}-0`)?.value);
+                    const time2 = parseTime(document.getElementById(`race2-time-${team.id}-1`)?.value);
+                    totalTime = (time1 === Infinity ? 0 : time1) + (time2 === Infinity ? 0 : time2);
+                    validTimes = (time1 !== Infinity ? 1 : 0) + (time2 !== Infinity ? 1 : 0);
+                    if (time1 !== Infinity) {
+                        runnerResults.push({
+                            ...runner,
+                            displayName: `${runner.name} (Tempo 1)`,
+                            time: time1,
+                            timeFormatted: formatTime(time1)
+                        });
+                    }
+                    if (time2 !== Infinity) {
+                        runnerResults.push({
+                            ...runner,
+                            displayName: `${runner.name} (Tempo 2)`,
+                            time: time2,
+                            timeFormatted: formatTime(time2)
+                        });
+                    }
+                } else {
+                    team.runners.forEach((runner, idx) => {
+                        const time = parseTime(document.getElementById(`race2-time-${team.id}-${idx}`)?.value);
+                        if (time !== Infinity) {
+                            totalTime += time;
+                            validTimes++;
+                        }
+                        runnerResults.push({
+                            ...runner,
+                            displayName: runner.name,
+                            time: time,
+                            timeFormatted: formatTime(time)
+                        });
+                    });
+                }
+
+                teamResults.push({
+                    ...team,
+                    time: totalTime,
+                    timeFormatted: formatTime(totalTime),
+                    validTimes
+                });
+            });
+
+            teamResults.sort((a, b) => {
+                if (a.time !== b.time) return a.time - b.time;
+                return a.qualPosition - b.qualPosition;
+            });
+
+            runnerResults.sort((a, b) => {
+                if (a.time !== b.time) return a.time - b.time;
+                return (qualifyingResults.runners.find(r => r.id === a.id)?.qualPosition || 0) - 
+                       (qualifyingResults.runners.find(r => r.id === b.id)?.qualPosition || 0);
+            });
+
+            teamResults.forEach((team, idx) => {
+                team.points = finalPointsSystem[idx] || 0;
+                team.position = idx + 1;
+                team.runners.forEach(runner => {
+                    runner.race2Points = team.points;
+                });
+            });
+
+            race2Results = { teams: teamResults, runners: runnerResults };
+            displayRace2Results();
+        }
+
+        function displayRace2Results() {
+            console.log('Visualizzazione risultati Gara 2');
+            const container = document.getElementById('race2-results');
+            container.innerHTML = `
+                <h3>🏆 Classifica Gara 2 - Squadre</h3>
+                <table class="standings-table">
+                    <thead>
+                        <tr><th>Pos.</th><th>Squadra</th><th>Tempo Totale</th><th>Punti</th></tr>
+                    </thead>
+                    <tbody>
+                        ${race2Results.teams.map(team => 
+                            `<tr><td>${team.position}</td><td>${team.name}</td><td>${team.timeFormatted}</td><td>${team.points}</td></tr>`
+                        ).join('')}
+                    </tbody>
+                </table>
+                <h3>📊 Classifica Gara 2 - Corridori (Statistica)</h3>
+                <table class="standings-table">
+                    <thead>
+                        <tr><th>Pos.</th><th>Corridore</th><th>Squadra</th><th>Tempo</th></tr>
+                    </thead>
+                    <tbody>
+                        ${race2Results.runners.map((runner, idx) => 
+                            `<tr><td>${idx + 1}</td><td>${runner.displayName}</td><td>${runner.teamName}</td><td>${runner.timeFormatted}</td></tr>`
+                        ).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        // Configurazione Gara 3
+        function setupRace3Groups() {
+            console.log('Configurazione Gara 3');
+            if (!qualifyingResults.teams) return;
+
+            const container = document.getElementById('race3-groups');
+            const teamsCount = qualifyingResults.teams.length;
+            const groupSize = Math.min(4, Math.max(2, Math.floor(teamsCount / 2)));
+            const numRounds = teamsCount <= 6 ? 2 : 3;
+
+            container.innerHTML = `
+                <h4>Formazione Gruppi per Gara 3</h4>
+                <p>Numero di round: ${numRounds} | Gruppi da ${groupSize} squadre</p>
+            `;
+
+            setupRace3Rounds(numRounds, groupSize);
+        }
+
+        function setupRace3Rounds(numRounds, groupSize) {
+            const container = document.getElementById('race3-rounds');
+            container.innerHTML = '';
+
+            for (let round = 1; round <= numRounds; round++) {
+                const roundDiv = document.createElement('div');
+                roundDiv.innerHTML = `<h4>Round ${round}</h4><div id="race3-round-${round}"></div>`;
+                container.appendChild(roundDiv);
+                setupRace3Round(round, groupSize);
+            }
+        }
+
+        function setupRace3Round(round, groupSize) {
+            const container = document.getElementById(`race3-round-${round}`);
+            const teamsToUse = [...qualifyingResults.teams];
+
+            for (let i = teamsToUse.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [teamsToUse[i], teamsToUse[j]] = [teamsToUse[j], teamsToUse[i]];
+            }
+
+            const groups = [];
+            let remainingTeams = [...teamsToUse];
+
+            while (remainingTeams.length > 0) {
+                const currentGroupSize = Math.min(groupSize, remainingTeams.length);
+                if (remainingTeams.length === 1 && groups.length > 0) {
+                    groups[groups.length - 1].push(remainingTeams[0]);
+                    remainingTeams = [];
+                } else {
+                    groups.push(remainingTeams.splice(0, currentGroupSize));
+                }
+            }
+
+            groups.forEach((group, groupIdx) => {
+                const groupDiv = document.createElement('div');
+                groupDiv.className = 'group';
+                groupDiv.innerHTML = `
+                    <h4>Gruppo ${groupIdx + 1}</h4>
+                    <div class="position-inputs">
+                        ${group.map((team, pos) => `
+                            <div>
+                                <label>${team.name} - Posizione:</label>
+                                <select id="race3-r${round}-g${groupIdx}-t${team.id}">
+                                    ${Array.from({length: group.length}, (_, i) => 
+                                        `<option value="${i + 1}" ${i === pos ? 'selected' : ''}>${i + 1}°</option>`
+                                    ).join('')}
+                                </select>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(groupDiv);
+            });
+        }
+
+        function calculateRace3Results() {
+            console.log('Calcolo risultati Gara 3');
+            const teamResults = [];
+
+            teams.forEach(team => {
+                let totalRoundPoints = 0;
+                const roundSelects = document.querySelectorAll(`[id*="race3-r"][id*="t${team.id}"]`);
+                roundSelects.forEach(select => {
+                    const position = parseInt(select.value);
+                    totalRoundPoints += roundPointsSystem[position - 1] || 0;
+                });
+
+                teamResults.push({
+                    ...team,
+                    roundPoints: totalRoundPoints
+                });
+            });
+
+            teamResults.sort((a, b) => {
+                if (a.roundPoints !== b.roundPoints) return b.roundPoints - a.roundPoints;
+                return a.qualPosition - b.qualPosition;
+            });
+
+            teamResults.forEach((team, idx) => {
+                team.points = finalPointsSystem[idx] || 0;
+                team.position = idx + 1;
+                team.runners.forEach(runner => {
+                    runner.race3Points = team.points;
+                });
+            });
+
+            race3Results = { teams: teamResults };
+            displayRace3Results();
+        }
+
+        function displayRace3Results() {
+            console.log('Visualizzazione risultati Gara 3');
+            const container = document.getElementById('race3-results');
+            container.innerHTML = `
+                <h3>🏆 Classifica Gara 3 - Squadre</h3>
+                <table class="standings-table">
+                    <thead>
+                        <tr><th>Pos.</th><th>Squadra</th><th>Punti Round</th><th>Punti Finali</th></tr>
+                    </thead>
+                    <tbody>
+                        ${race3Results.teams.map(team => 
+                            `<tr><td>${team.position}</td><td>${team.name}</td><td>${team.roundPoints}</td><td>${team.points}</td></tr>`
+                        ).join('')}
+                    </tbody>
+                </table>
+                <p><small>Punti round: 1°=10pt, 2°=8pt, 3°=6pt, 4°=4pt, 5°=2pt<br>Punti finali: 1°=25pt, 2°=18pt, 3°=15pt, ecc.</small></p>
+            `;
+        }
+
+        // Configurazione Gara 4
+        function setupRace4Groups() {
+            console.log('Configurazione Gara 4');
+            const container = document.getElementById('race4-groups');
+            const runnersCount = runners.length;
+
+            container.innerHTML = `
+                <div class="race4-config">
+                    <h4>Configura Gara 4</h4>
+                    <div class="form-group">
+                        <label for="race4-num-rounds">Numero di round (1-5):</label>
+                        <input type="number" id="race4-num-rounds" min="1" max="5" value="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="race4-num-groups">Numero di gruppi per round (1-${Math.ceil(runnersCount / 2)}):</label>
+                        <input type="number" id="race4-num-groups" min="1" max="${Math.ceil(runnersCount / 2)}" value="1">
+                    </div>
+                    <button id="generate-race4-groups-btn" class="btn">Genera Gruppi</button>
+                    <div id="race4-error-message" class="error-message"></div>
+                </div>
+                <div id="race4-groups-container"></div>
+            `;
+
+            // Aggiungi listener al pulsante Genera Gruppi
+            const generateButton = document.getElementById('generate-race4-groups-btn');
+            if (generateButton) {
+                generateButton.addEventListener('click', () => {
+                    console.log('Pulsante Genera Gruppi cliccato');
+                    generateRace4Groups();
+                });
+                console.log('Listener aggiunto al pulsante generate-race4-groups-btn');
+            } else {
+                console.error('Pulsante generate-race4-groups-btn non trovato');
+            }
+        }
+
+        // Generazione gruppi Gara 4
+        function generateRace4Groups() {
+            console.log('Funzione generateRace4Groups avviata');
+            try {
+                const numRoundsInput = document.getElementById('race4-num-rounds');
+                const numGroupsInput = document.getElementById('race4-num-groups');
+                const errorMessage = document.getElementById('race4-error-message');
+                const container = document.getElementById('race4-groups-container');
+
+                if (!numRoundsInput || !numGroupsInput || !errorMessage || !container) {
+                    throw new Error('Elementi DOM per Gara 4 non trovati');
+                }
+
+                const numRounds = parseInt(numRoundsInput.value);
+                const numGroups = parseInt(numGroupsInput.value);
+                if (isNaN(numRounds) || numRounds < 1 || numRounds > 5) {
+                    errorMessage.textContent = 'Inserisci un numero di round valido (1-5)';
+                    errorMessage.style.display = 'block';
+                    console.log('Errore: Numero di round non valido:', numRounds);
+                    return;
+                }
+
+                if (isNaN(numGroups) || numGroups < 1 || numGroups > Math.ceil(runners.length / 2)) {
+                    errorMessage.textContent = `Inserisci un numero di gruppi valido (1-${Math.ceil(runners.length / 2)})`;
+                    errorMessage.style.display = 'block';
+                    console.log('Errore: Numero di gruppi non valido:', numGroups);
+                    return;
+                }
+
+                const minGroupSize = Math.floor(runners.length / numGroups);
+                if (minGroupSize < 2 && numGroups !== 1) {
+                    errorMessage.textContent = 'Troppi gruppi: ogni gruppo deve avere almeno 2 corridori';
+                    errorMessage.style.display = 'block';
+                    console.log('Errore: Gruppo troppo piccolo:', minGroupSize);
+                    return;
+                }
+
+                errorMessage.style.display = 'none';
+                container.innerHTML = `<h4>Gruppi per Gara 4</h4>`;
+                console.log('Generazione di', numRounds, 'round con', numGroups, 'gruppi per round');
+
+                for (let round = 1; round <= numRounds; round++) {
+                    const roundDiv = document.createElement('div');
+                    roundDiv.innerHTML = `<h4>Round ${round}</h4>`;
+                    let availableRunners = [...runners];
+                    const groups = [];
+
+                    for (let g = 0; g < numGroups; g++) {
+                        const groupSize = g < runners.length % numGroups 
+                            ? Math.ceil(runners.length / numGroups) 
+                            : Math.floor(runners.length / numGroups);
+                        if (availableRunners.length < groupSize) break;
+                        const group = [];
+                        for (let i = 0; i < groupSize; i++) {
+                            const randomIndex = Math.floor(Math.random() * availableRunners.length);
+                            group.push(availableRunners.splice(randomIndex, 1)[0]);
+                        }
+                        groups.push(group);
+                    }
+
+                    groups.forEach((group, groupIdx) => {
+                        const groupDiv = document.createElement('div');
+                        groupDiv.className = 'group';
+                        groupDiv.innerHTML = `
+                            <h4>Gruppo ${groupIdx + 1}</h4>
+                            <div class="position-inputs">
+                                ${group.map((runner, pos) => `
+                                    <div>
+                                        <label>${runner.name} (${runner.teamName}) - Posizione:</label>
+                                        <select id="position-r${round}-g${groupIdx}-r${runner.id}">
+                                            ${Array.from({length: group.length}, (_, i) => 
+                                                `<option value="${i + 1}" ${i === pos ? 'selected' : ''}>${i + 1}°</option>`
+                                            ).join('')}
+                                        </select>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `;
+                        roundDiv.appendChild(groupDiv);
+                    });
+
+                    container.appendChild(roundDiv);
+                }
+                console.log('Gruppi generati con successo per', numRounds, 'round');
+            } catch (error) {
+                console.error('Errore in generateRace4Groups:', error);
+                const errorMessage = document.getElementById('race4-error-message');
+                if (errorMessage) {
+                    errorMessage.textContent = 'Errore nella generazione dei gruppi: ' + error.message;
+                    errorMessage.style.display = 'block';
+                }
+            }
+        }
+
+        // Calcolo risultati Gara 4
+        function calculateRace4Results() {
+            console.log('Calcolo risultati Gara 4');
+            const runnerResults = [];
+
+            // Inizializza i risultati per ogni corridore
+            runners.forEach(runner => {
+                runnerResults.push({
+                    ...runner,
+                    roundPoints: 0,
+                    roundDetails: []
+                });
+            });
+
+            // Leggi le posizioni
+            const numRounds = parseInt(document.getElementById('race4-num-rounds')?.value) || 1;
+            const numGroups = parseInt(document.getElementById('race4-num-groups')?.value) || 1;
+
+            for (let round = 1; round <= numRounds; round++) {
+                for (let group = 0; group < numGroups; group++) {
+                    runnerResults.forEach(runner => {
+                        const selectId = `position-r${round}-g${group}-r${runner.id}`;
+                        const select = document.getElementById(selectId);
+                        if (select) {
+                            const position = parseInt(select.value);
+                            console.log(`Round ${round}, Gruppo ${group + 1}, ${runner.name}: Posizione ${position}`);
+                            const points = roundPointsSystemRace4[position - 1] || 0;
+                            runner.roundPoints += points;
+                            runner.roundDetails.push({ round, group: group + 1, position, points });
+                            console.log(`Assegnati ${points} punti a ${runner.name} per posizione ${position} in round ${round}, gruppo ${group + 1}`);
+                        }
+                    });
+                }
+            }
+
+            // Ordina i corridori
+            runnerResults.sort((a, b) => {
+                if (a.roundPoints !== b.roundPoints) return b.roundPoints - a.roundPoints;
+                const aQual = qualifyingResults.runners?.find(r => r.id === a.id)?.qualPosition || 999;
+                const bQual = qualifyingResults.runners?.find(r => r.id === b.id)?.qualPosition || 999;
+                return aQual - bQual;
+            });
+
+            // Assegna punti finali
+            runnerResults.forEach((runner, idx) => {
+                runner.points = finalPointsSystem[idx] || 0;
+                runner.position = idx + 1;
+                runner.race4Points = runner.points;
+                console.log(`${runner.name}: Totale punti round = ${runner.roundPoints}, Punti finali = ${runner.points}, Posizione = ${runner.position}`);
+            });
+
+            // Calcola punti delle squadre
+            const teamResults = [];
+            teams.forEach(team => {
+                const teamRunners = runnerResults.filter(r => r.teamId === team.id);
+                const totalPoints = teamRunners.reduce((sum, r) => sum + (r.points || 0), 0);
+                teamResults.push({
+                    ...team,
+                    points: totalPoints,
+                    runners: teamRunners,
+                    position: 0
+                });
+            });
+
+            // Ordina squadre
+            teamResults.sort((a, b) => {
+                if (a.points !== b.points) return b.points - a.points;
+                const aQualTeam = qualifyingResults.teams?.find(t => t.id === a.id)?.qualPosition || 999;
+                const bQualTeam = qualifyingResults.teams?.find(t => t.id === b.id)?.qualPosition || 999;
+                return aQualTeam - bQualTeam;
+            });
+
+            teamResults.forEach((team, idx) => {
+                team.position = idx + 1;
+                console.log(`Squadra ${team.name}: Punti totali = ${team.points}, Posizione = ${team.position}`);
+            });
+
+            race4Results = { runners: runnerResults, teams: teamResults };
+            displayRace4Results();
+            calculateFinalStandings();
+        }
+
+        function displayRace4Results() {
+            console.log('Visualizzazione risultati Gara 4');
+            const container = document.getElementById('race4-results');
+            container.innerHTML = `
+                <h3>🏆 Classifica Gara 4 - Corridori</h3>
+                <table class="standings-table">
+                    <thead>
+                        <tr><th>Posizione</th><th>Corridore</th><th>Squadra</th><th>Punti Round</th><th>Punti Finali</th></tr>
+                    </thead>
+                    <tbody>
+                        ${race4Results.runners.map(runner => `
+                            <tr>
+                                <td>${runner.position}</td>
+                                <td>${runner.name}</td>
+                                <td>${runner.teamName}</td>
+                                <td>${runner.roundPoints}</td>
+                                <td>${runner.points}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+                <h3>🏆 Classifica Gara 4 - Squadre</h3>
+                <table class="standings-table">
+                    <thead>
+                        <tr><th>Posizione</th><th>Squadra</th><th>Punti Totali</th></tr>
+                    </thead>
+                    <tbody>
+                        ${race4Results.teams.map(team => `
+                            <tr>
+                                <td>${team.position}</td>
+                                <td>${team.name}</td>
+                                <td>${team.points}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+                <p><small>Punti round: 1°=10pt, 2°=8pt, 3°=6pt, 4°=4pt, 5°=2pt<br>Punti finali: 1°=25pt, 2°=18pt, 3°=15pt, ecc.</small></p>
+            `;
+        }
+
+        // Classifica finale
+        function calculateFinalStandings() {
+            console.log('Calcolo classifica finale');
+            const runnerStandings = [];
+
+            teams.forEach(team => {
+                team.runners.forEach(runner => {
+                    const race2Points = race2Results.teams?.find(t => t.id === team.id)?.points || 0;
+                    const race3Points = race3Results.teams?.find(t => t.id === team.id)?.points || 0;
+                    const race4Points = race4Results.runners?.find(r => r.id === runner.id)?.points || 0;
+                    const totalPoints = (runner.presentPoints || 0) + race2Points + race3Points + race4Points;
+
+                    runnerStandings.push({
+                        ...runner,
+                        presencePoints: runner.presentPoints || 0,
+                        race2Points,
+                        race3Points,
+                        race4Points,
+                        totalPoints
+                    });
+                });
+            });
+
+            runnerStandings.sort((a, b) => {
+                if (a.totalPoints !== b.totalPoints) return b.totalPoints - a.totalPoints;
+                const aQual = qualifyingResults.runners?.find(r => r.id === a.id)?.qualPosition || 0;
+                const bQual = qualifyingResults.runners?.find(r => r.id === b.id)?.qualPosition || 0;
+                return aQual - bQual;
+            });
+
+            const teamStandings = [];
+            teams.forEach(team => {
+                const teamMembers = runnerStandings.filter(r => r.teamId === team.id);
+                const presencePoints = teamMembers.reduce((sum, r) => sum + (r.presencePoints || 0), 0);
+                const race2Points = race2Results.teams?.find(t => t.id === team.id)?.points || 0;
+                const race3Points = race3Results.teams?.find(t => t.id === team.id)?.points || 0;
+                const race4Points = race4Results.teams?.find(t => t.id === team.id)?.points || 0;
+                const totalPoints = presencePoints + race2Points + race3Points + race4Points;
+
+                teamStandings.push({
+                    ...team,
+                    presencePoints,
+                    race2Points,
+                    race3Points,
+                    race4Points,
+                    totalPoints
+                });
+            });
+
+            teamStandings.sort((a, b) => {
+                if (a.totalPoints !== b.totalPoints) return b.totalPoints - a.totalPoints;
+                const aQual = qualifyingResults.teams?.find(t => t.id === a.id)?.qualPosition || 0;
+                const bQual = qualifyingResults.teams?.find(t => t.id === b.id)?.qualPosition || 0;
+                return aQual - bQual;
+            });
+
+            finalStandings = { runners: runnerStandings, teams: teamStandings };
+            displayFinalStandings();
+        }
+
+        function displayFinalStandings() {
+            console.log('Visualizzazione classifica finale');
+            const container = document.getElementById('final-standings');
+            container.innerHTML = `
+                <div class="final-table">
+                    <h3>🏆 Classifica Finale - Corridori</h3>
+                    <table class="standings-table">
+                        <thead>
+                            <tr>
+                                <th>Pos.</th>
+                                <th>Corridore</th>
+                                <th>Squadra</th>
+                                <th>Presenza</th>
+                                <th>Gara 2</th>
+                                <th>Gara 3</th>
+                                <th>Gara 4</th>
+                                <th>Totale</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${finalStandings.runners.map((runner, idx) => `
+                                <tr>
+                                    <td><strong>${idx + 1}</strong></td>
+                                    <td><strong>${runner.name}</strong></td>
+                                    <td>${runner.teamName}</td>
+                                    <td>${runner.presencePoints}</td>
+                                    <td>${runner.race2Points}</td>
+                                    <td>${runner.race3Points}</td>
+                                    <td>${runner.race4Points}</td>
+                                    <td><strong>${runner.totalPoints}</strong></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="final-table">
+                    <h3>🏆 Classifica Finale - Squadre</h3>
+                    <table class="standings-table">
+                        <thead>
+                            <tr>
+                                <th>Pos.</th>
+                                <th>Squadra</th>
+                                <th>Presenza</th>
+                                <th>Gara 2</th>
+                                <th>Gara 3</th>
+                                <th>Gara 4</th>
+                                <th>Totale</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${finalStandings.teams.map((team, idx) => `
+                                <tr>
+                                    <td><strong>${idx + 1}</strong></td>
+                                    <td><strong>${team.name}</strong></td>
+                                    <td>${team.presencePoints}</td>
+                                    <td>${team.race2Points}</td>
+                                    <td>${team.race3Points}</td>
+                                    <td>${team.race4Points}</td>
+                                    <td><strong>${team.totalPoints}</strong></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+    } catch (error) {
+        console.error('Errore globale:', error);
+        const errorMessage = document.getElementById('error-message');
+        if (errorMessage) {
+            errorMessage.textContent = 'Errore critico: ' + error.message;
+            errorMessage.style.display = 'block';
+        }
+    }
+</script>
+    </body>
+</html>
